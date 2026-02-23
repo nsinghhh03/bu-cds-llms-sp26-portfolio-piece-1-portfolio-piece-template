@@ -1,81 +1,34 @@
-# Portfolio Piece Assignment
+# Tokenization Efficiency and Multilingual Cost in Large Language Models
 
-This repository is a template for your portfolio piece. You'll build on your weekly labs to create a polished, well-documented project that demonstrates your understanding of the concepts we've covered.
+## Overview
 
-## What You're Building
+Large language models process text as tokens rather than characters. Because tokenization is not uniform across languages, semantically equivalent text can require very different numbers of tokens. This project analyzes how tokenization efficiency varies across English, Spanish, Hindi, and Chinese, and examines the implications for context window limits and token-based pricing in multilingual LLM systems.
 
-Your portfolio piece could be a Jupyter notebook (or set of notebooks), or another reporting format (PDF with embedded images, etc.) that:
-- Demonstrates understanding of course concepts
-- Includes working, well-documented code (in notebooks or imported scripts)
-- Analyzes results critically
-- Tells a clear story from problem/question to approach to results and insights
+## Methods
 
-If you'd like, this can become part of your professional portfolio, so treat it as work you'd be proud to show a potential employer or collaborator.
+This project uses a controlled parallel corpus containing 25 semantically comparable texts in each language, including short user-facing prompts, technical statements, and longer explanatory paragraphs. All text is tokenized using the cl100k_base encoding from the tiktoken library to ensure consistency across languages.
 
-## Grading
+For each language, the analysis computes:
 
-Your work will be evaluated on:
-- **Conceptual Understanding** (5 pts): Do you explain *why* you chose specific methods? Do you connect to course material?
-- **Technical Implementation** (5 pts): Does your code run without errors? Do all components work correctly?
-- **Code Quality & Documentation** (5 pts): Is your notebook/code clear and well-organized? Does it tell a story?
-- **Critical Analysis** (5 pts): Do you interpret results thoughtfully? Discuss limitations and tradeoffs?
-- **Peer Reviews** (5 pts): Did you provide constructive feedback on two classmates' projects?
+Mean tokens per sample
+Tokens per character
+Characters per token (compression efficiency)
+Tokens per 1,000 characters (cost proxy)
+Approximate number of characters that fit in an 8,000-token context window
 
-See the full [rubric](https://lauren897.github.io/cds593-private/rubrics.html#portfolio-piece-rubric) for details.
+Distributions are visualized using bar charts and boxplots to show both central tendency and variability. A token-level inspection is included to illustrate how subword segmentation differs across scripts.
 
-## Suggested Repository Structure
+These methods were chosen to isolate tokenization effects while controlling for semantic content, allowing differences to be attributed primarily to tokenizer behavior and writing system characteristics.
 
-You're free to organize this however makes sense for your project, but here's a structure that works well:
+## Key Results
 
-```
-your-portfolio-piece/
-├── README.md (this file - update it with your project details)
-├── requirements.txt or equivalent
-├── notebooks/
-│   └── main_analysis.ipynb (or multiple notebooks)
-├── src/ (optional - if you refactor code into modules)
-├── data/ (see note below about data)
-├── outputs/ (figures, saved models, etc.)
-```
+Tokenization efficiency differs substantially across languages. English and Spanish are more compact under the selected tokenizer, fitting significantly more characters into a fixed 8k-token context window. Chinese and Hindi require more tokens for comparable content, reducing effective context capacity and increasing token-based cost per character.
 
-**About data**: If your dataset is small (<10 MB), you can include it in the repo. For larger datasets, put instructions in your README for how to download/access it, and add data files to `.gitignore`.
+These findings suggest that fixed token limits and token-based pricing create unequal effective context sizes across languages. While model architectures may be language-agnostic, tokenization introduces structural differ
 
-## Writing a Good README
+## Requirements
 
-Once you've completed your project, update this README to include:
-
-1. **Project Title** - make it descriptive
-2. **Overview** - 2-3 sentences: what problem are you solving and why?
-3. **Methods** - what approaches did you use? Why these choices?
-4. **Key Results** - what did you find? (keep it brief, details go in the notebook)
-5. **How to Run** - step-by-step instructions so someone can reproduce your work
-6. **Requirements** - what packages/versions are needed?
-
-Your README should make it easy for someone to understand what you did and run your code.
-
-## Peer Review Process
-
-You'll be assigned two classmates' repositories to review. Provide your feedback through **pull requests**:
-
-1. Clone your assigned classmate's repository to your machine
-2. Read through their notebooks, scripts, and documentation
-3. Try running the code yourself
-4. Create a pull request with inline comments on their code/analysis
-5. In the PR description, provide overall feedback addressing:
-   - What worked well conceptually and technically?
-   - What could be clearer in the documentation or analysis?
-   - Specific suggestions for deeper analysis or improvements
-   - Overall strengths of the project
-
-Be constructive and specific. Good peer reviews identify both strengths and areas for growth.
-
-You are *not* grading each other's pieces, just providing feedback.
-
-## Timeline
-
-- **Friday, Feb 20**: Portfolio piece due (push your final version to this repo)
-- **Friday, Feb 27**: Peer reviews due (submit PRs with feedback to your assigned classmates' repos)
-
-## Questions?
-
-We can discuss more in class, in office hours, in discussion, and you can ask on Piazza.
+Python 3.10+
+pandas
+matplotlib
+tiktoken
